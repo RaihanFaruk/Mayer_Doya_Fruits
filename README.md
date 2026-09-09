@@ -201,4 +201,4 @@ The project is optimized for zero-configuration deployment on **Vercel** (Hobby/
 
 ## 📄 License
 
-License information can be added here.
+License information can be added here. understand
