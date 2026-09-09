@@ -2,8 +2,10 @@ import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Product } from "@/types";
 import { INITIAL_PRODUCTS } from "@/lib/initialData";
 import { SITE_URL } from "@/lib/siteConfig";
+import { supabase, isSupabaseConfigured } from "@/lib/supabaseClient";
 import { ProductPageClient } from "@/components/ProductPageClient";
 import { Header } from "@/components/Header";
 import { TopUtilityBar } from "@/components/TopUtilityBar";
@@ -19,14 +21,48 @@ interface Props {
   };
 }
 
+async function getProduct(id: string): Promise<Product | null> {
+  const initial = INITIAL_PRODUCTS.find((p) => p.id === id);
+  if (initial) return initial;
+
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("id", id)
+        .single();
+      if (!error && data) {
+        return data as Product;
+      }
+    } catch (err) {
+      console.warn("Could not fetch product from Supabase:", err);
+    }
+  }
+  return null;
+}
+
 export async function generateStaticParams() {
-  return INITIAL_PRODUCTS.map((prod) => ({
-    id: prod.id,
-  }));
+  const paramsList = INITIAL_PRODUCTS.map((prod) => ({ id: prod.id }));
+
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data } = await supabase.from("products").select("id").eq("is_active", true);
+      if (data) {
+        data.forEach((p) => {
+          if (!paramsList.some((item) => item.id === p.id)) {
+            paramsList.push({ id: p.id });
+          }
+        });
+      }
+    } catch {}
+  }
+
+  return paramsList;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const product = INITIAL_PRODUCTS.find((p) => p.id === params.id);
+  const product = await getProduct(params.id);
 
   if (!product) {
     return {
@@ -80,8 +116,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function ProductDetailPage({ params }: Props) {
-  const product = INITIAL_PRODUCTS.find((p) => p.id === params.id);
+export default async function ProductDetailPage({ params }: Props) {
+  const product = await getProduct(params.id);
 
   if (!product) {
     notFound();
@@ -98,6 +134,7 @@ export default function ProductDetailPage({ params }: Props) {
     "description": product.description || `বাগান থেকে সংগৃহীত ১০০% খাঁটি তাজা ${product.name}।`,
     "sku": product.id,
     "mpn": product.id,
+    "category": product.category || "তাজা ফল",
     "brand": {
       "@type": "Brand",
       "name": "মায়ের দোয়া ফল",
@@ -107,7 +144,7 @@ export default function ProductDetailPage({ params }: Props) {
       "url": `${SITE_URL}/products/${product.id}`,
       "priceCurrency": "BDT",
       "price": product.price,
-      "priceValidUntil": "2026-12-31",
+      "priceValidUntil": "2027-12-31",
       "itemCondition": "https://schema.org/NewCondition",
       "availability":
         product.stock && product.stock > 0

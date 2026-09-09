@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { supabase, isSupabaseConfigured } from "@/lib/supabaseClient";
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { getAuthenticatedAdmin } from "@/lib/authMiddleware";
 import { INITIAL_PRODUCTS } from "@/lib/initialData";
 
 export const dynamic = "force-dynamic";
@@ -26,6 +28,14 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
+    const admin = await getAuthenticatedAdmin(req);
+    if (!admin) {
+      return NextResponse.json(
+        { error: "অননুমোদিত অ্যাক্সেস (Unauthorized)" },
+        { status: 401 }
+      );
+    }
+
     const body = await req.json();
     const { name, price, unit, image_url, stock, is_active } = body;
 
@@ -33,8 +43,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Name and price are required" }, { status: 400 });
     }
 
-    if (isSupabaseConfigured && supabase) {
-      const { data, error } = await supabase
+    const client = supabaseAdmin || supabase;
+    if (isSupabaseConfigured && client) {
+      const { data, error } = await client
         .from("products")
         .insert({
           name,
@@ -72,6 +83,14 @@ export async function POST(req: Request) {
 
 export async function PUT(req: Request) {
   try {
+    const admin = await getAuthenticatedAdmin(req);
+    if (!admin) {
+      return NextResponse.json(
+        { error: "অননুমোদিত অ্যাক্সেস (Unauthorized)" },
+        { status: 401 }
+      );
+    }
+
     const body = await req.json();
     const { id, ...updates } = body;
 
@@ -79,8 +98,9 @@ export async function PUT(req: Request) {
       return NextResponse.json({ error: "Product id is required" }, { status: 400 });
     }
 
-    if (isSupabaseConfigured && supabase) {
-      const { data, error } = await supabase
+    const client = supabaseAdmin || supabase;
+    if (isSupabaseConfigured && client) {
+      const { data, error } = await client
         .from("products")
         .update(updates)
         .eq("id", id)
@@ -102,6 +122,14 @@ export async function PUT(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
+    const admin = await getAuthenticatedAdmin(req);
+    if (!admin) {
+      return NextResponse.json(
+        { error: "অননুমোদিত অ্যাক্সেস (Unauthorized)" },
+        { status: 401 }
+      );
+    }
+
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
 
@@ -109,8 +137,9 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: "Product id is required" }, { status: 400 });
     }
 
-    if (isSupabaseConfigured && supabase) {
-      const { error } = await supabase.from("products").delete().eq("id", id);
+    const client = supabaseAdmin || supabase;
+    if (isSupabaseConfigured && client) {
+      const { error } = await client.from("products").delete().eq("id", id);
       if (error) throw error;
     }
 

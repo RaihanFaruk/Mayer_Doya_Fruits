@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useCart } from "@/context/CartContext";
-import { getWhatsAppUrl } from "@/lib/whatsapp";
+import { getWhatsAppUrl, sanitizePhone } from "@/lib/whatsapp";
 
 export const CheckoutModal: React.FC = () => {
   const {
@@ -13,6 +13,7 @@ export const CheckoutModal: React.FC = () => {
     setIsCheckoutOpen,
     setIsOrderSuccessOpen,
     setLastOrderId,
+    setLastWhatsAppUrl,
     clearCart,
     totalAmount,
     deliveryCharge,
@@ -25,6 +26,7 @@ export const CheckoutModal: React.FC = () => {
   const [address, setAddress] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const isSubmittingRef = useRef(false);
 
   useEffect(() => {
     if (customer) {
@@ -38,12 +40,18 @@ export const CheckoutModal: React.FC = () => {
 
   const handleSubmitOrder = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isOnline) {
+
+    // Prevent double submission from fast clicks or multiple events
+    if (isSubmittingRef.current || isSubmitting) {
+      return;
+    }
+
+    if (!isOnline || (typeof navigator !== "undefined" && !navigator.onLine)) {
       setErrorMessage("ইন্টারনেট সংযোগ নেই। দয়া করে ইন্টারনেট চালু করে পুনরায় চেষ্টা করুন।");
       return;
     }
 
-    const cleanPhone = phone.trim();
+    const cleanPhone = sanitizePhone(phone);
     if (!name.trim() || !cleanPhone || !address.trim()) {
       setErrorMessage("দয়া করে আপনার নাম, মোবাইল নম্বর এবং সম্পূর্ণ ঠিকানা পূরণ করুন।");
       return;
@@ -54,6 +62,7 @@ export const CheckoutModal: React.FC = () => {
       return;
     }
 
+    isSubmittingRef.current = true;
     setIsSubmitting(true);
     setErrorMessage("");
 
@@ -66,22 +75,32 @@ export const CheckoutModal: React.FC = () => {
       });
 
       // 2. Submit order to API
-      const res = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: name.trim(),
-          phone: cleanPhone,
-          address: address.trim(),
-          items: cart,
-          totalAmount,
-        }),
-      });
+      let orderId = `MDF-${Math.floor(10000 + Math.random() * 90000)}`;
 
-      const data = await res.json();
-      const orderId = data.orderId || `MDF-${Math.floor(10000 + Math.random() * 90000)}`;
+      try {
+        const res = await fetch("/api/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: name.trim(),
+            phone: cleanPhone,
+            address: address.trim(),
+            items: cart,
+            totalAmount,
+          }),
+        });
 
-      // 3. Launch WhatsApp link in a new tab
+        if (res.ok) {
+          const data = await res.json();
+          if (data.orderId) {
+            orderId = data.orderId;
+          }
+        }
+      } catch (apiErr) {
+        console.warn("Order API call failed, continuing with WhatsApp checkout fallback:", apiErr);
+      }
+
+      // 3. Generate itemized WhatsApp order link
       const whatsappUrl = getWhatsAppUrl({
         orderId,
         name: name.trim(),
@@ -91,31 +110,25 @@ export const CheckoutModal: React.FC = () => {
         totalAmount,
       });
 
-      window.open(whatsappUrl, "_blank");
+      setLastWhatsAppUrl(whatsappUrl);
 
-      // 4. Update state & open success modal
+      // Attempt to open WhatsApp tab (might be blocked by browser popup blocker)
+      try {
+        window.open(whatsappUrl, "_blank");
+      } catch (popupErr) {
+        console.warn("Popup blocked by browser, user can tap link in success modal:", popupErr);
+      }
+
+      // 4. Update state & transition to success modal
       setLastOrderId(orderId);
       clearCart();
       setIsCheckoutOpen(false);
       setIsOrderSuccessOpen(true);
     } catch (err: unknown) {
-      console.error("Order submission failed:", err);
-      // Even if API fails due to network glitch, open WhatsApp so order is never lost!
-      const fallbackOrderId = `MDF-${Math.floor(10000 + Math.random() * 90000)}`;
-      const whatsappUrl = getWhatsAppUrl({
-        orderId: fallbackOrderId,
-        name: name.trim(),
-        phone: cleanPhone,
-        address: address.trim(),
-        items: cart,
-        totalAmount,
-      });
-      window.open(whatsappUrl, "_blank");
-      setLastOrderId(fallbackOrderId);
-      clearCart();
-      setIsCheckoutOpen(false);
-      setIsOrderSuccessOpen(true);
+      console.error("Order submission process failed:", err);
+      setErrorMessage("অর্ডার প্রক্রিয়া করতে সমস্যা হয়েছে। দয়া করে পুনরায় চেষ্টা করুন।");
     } finally {
+      isSubmittingRef.current = false;
       setIsSubmitting(false);
     }
   };

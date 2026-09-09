@@ -11,6 +11,32 @@ export interface OrderMessageParams {
   totalAmount: number;
 }
 
+/**
+ * Normalizes phone number:
+ * - Converts Bengali numerals (০-৯) to English digits (0-9)
+ * - Removes spaces, dashes, parentheses
+ * - Handles country code +880 or leading 0 to ensure standard 11-digit format (01XXXXXXXXX)
+ */
+export function sanitizePhone(input: string): string {
+  if (!input) return "";
+  const bengaliDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
+  let str = input.trim();
+  bengaliDigits.forEach((d, idx) => {
+    str = str.split(d).join(String(idx));
+  });
+  // Strip all non-digits
+  let digits = str.replace(/\D/g, "");
+  // If starts with 880 (e.g. 8801862092701), remove 88 -> 01862092701
+  if (digits.startsWith("880") && digits.length === 13) {
+    digits = digits.slice(2);
+  }
+  // If user typed 10 digits starting with 1 (e.g. 1862092701), add leading 0
+  if (digits.startsWith("1") && digits.length === 10) {
+    digits = `0${digits}`;
+  }
+  return digits;
+}
+
 export function buildWhatsAppMessage({
   orderId,
   name,
@@ -25,6 +51,8 @@ export function buildWhatsAppMessage({
     day: "numeric",
   });
 
+  const formattedPhone = sanitizePhone(phone);
+
   const itemList = items
     .map(
       (item, idx) =>
@@ -35,9 +63,9 @@ export function buildWhatsAppMessage({
   const message = `*নতুন অর্ডার - মায়ের দোয়া ফল* 🍇🍎
 --------------------------------
 ${orderId ? `🔖 *অর্ডার আইডি:* #${orderId}\n` : ""}📅 *তারিখ:* ${dateStr}
-👤 *ক্রেতার নাম:* ${name}
-📱 *মোবাইল নম্বর:* ${phone}
-📍 *ডেলিভারি ঠিকানা:* ${address}
+👤 *ক্রেতার নাম:* ${name.trim()}
+📱 *মোবাইল নম্বর:* ${formattedPhone || phone}
+📍 *ডেলিভারি ঠিকানা:* ${address.trim()}
 --------------------------------
 📦 *ফলের তালিকা:*
 ${itemList}

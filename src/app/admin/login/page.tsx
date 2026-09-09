@@ -18,24 +18,28 @@ export default function AdminLoginPage() {
     setErrorMsg("");
 
     try {
-      if (isSupabaseConfigured && supabase) {
-        const { error } = await supabase.auth.signInWithPassword({
-          email: email.trim(),
-          password,
-        });
-        if (error) throw error;
-        router.push("/admin");
-      } else {
-        // Fallback for demo mode if Supabase env vars not yet configured
-        if (email === "admin@mayerdoa.com" && password === "admin123") {
-          localStorage.setItem("mayer_doa_admin_session", "true");
-          router.push("/admin");
-        } else {
-          // Allow mock login or inform user
-          localStorage.setItem("mayer_doa_admin_session", "true");
-          router.push("/admin");
-        }
+      if (!isSupabaseConfigured || !supabase) {
+        throw new Error(
+          "Supabase ডাটাবেজ কনফিগারেশন অনুপস্থিত। অনুগ্রহ করে .env.local ফাইলে Supabase ক্রেডেনশিয়াল যুক্ত করুন।"
+        );
       }
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
+
+      if (error) {
+        throw new Error("ভুল ইমেইল বা পাসওয়ার্ড। দয়া করে সঠিক ক্রেডেনশিয়াল দিন।");
+      }
+
+      if (!data.session) {
+        throw new Error("লগইন সেশন তৈরি করা সম্ভব হয়নি। পুনরায় চেষ্টা করুন।");
+      }
+
+      // Clear any legacy demo tokens
+      localStorage.removeItem("mayer_doa_admin_session");
+      router.push("/admin");
     } catch (err: unknown) {
       setErrorMsg(err instanceof Error ? err.message : "লগইন ব্যর্থ হয়েছে");
     } finally {

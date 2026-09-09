@@ -11,6 +11,7 @@ interface CartContextType {
   isCheckoutOpen: boolean;
   isOrderSuccessOpen: boolean;
   lastOrderId: string | null;
+  lastWhatsAppUrl: string | null;
   subtotal: number;
   deliveryCharge: number;
   totalAmount: number;
@@ -25,6 +26,7 @@ interface CartContextType {
   setIsCheckoutOpen: (open: boolean) => void;
   setIsOrderSuccessOpen: (open: boolean) => void;
   setLastOrderId: (id: string | null) => void;
+  setLastWhatsAppUrl: (url: string | null) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -39,6 +41,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isCheckoutOpen, setIsCheckoutOpen] = useState<boolean>(false);
   const [isOrderSuccessOpen, setIsOrderSuccessOpen] = useState<boolean>(false);
   const [lastOrderId, setLastOrderId] = useState<string | null>(null);
+  const [lastWhatsAppUrl, setLastWhatsAppUrl] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState<boolean>(false);
 
   // Initialize from localStorage and set up online/offline listeners
@@ -176,6 +179,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
         isCheckoutOpen,
         isOrderSuccessOpen,
         lastOrderId,
+        lastWhatsAppUrl,
         subtotal,
         deliveryCharge,
         totalAmount,
@@ -190,6 +194,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
         setIsCheckoutOpen,
         setIsOrderSuccessOpen,
         setLastOrderId,
+        setLastWhatsAppUrl,
       }}
     >
       {children}

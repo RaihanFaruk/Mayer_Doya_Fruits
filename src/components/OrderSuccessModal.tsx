@@ -5,9 +5,11 @@ import { useCart } from "@/context/CartContext";
 import { WHATSAPP_PHONE } from "@/lib/whatsapp";
 
 export const OrderSuccessModal: React.FC = () => {
-  const { isOrderSuccessOpen, setIsOrderSuccessOpen, lastOrderId } = useCart();
+  const { isOrderSuccessOpen, setIsOrderSuccessOpen, lastOrderId, lastWhatsAppUrl } = useCart();
 
   if (!isOrderSuccessOpen) return null;
+
+  const targetWhatsAppUrl = lastWhatsAppUrl || `https://wa.me/${WHATSAPP_PHONE}`;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-inverse-surface/60 backdrop-blur-sm">
@@ -41,7 +43,7 @@ export const OrderSuccessModal: React.FC = () => {
         {/* WhatsApp Manual Trigger button if tab was blocked */}
         <div className="mb-3">
           <a
-            href={`https://wa.me/${WHATSAPP_PHONE}`}
+            href={targetWhatsAppUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="w-full inline-flex items-center justify-center gap-2 bg-secondary hover:bg-primary text-surface-container-lowest py-2.5 rounded-xl font-label-lg text-label-lg font-bold transition-all"

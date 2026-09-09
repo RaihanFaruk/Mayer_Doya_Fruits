@@ -26,6 +26,18 @@ export default function AdminDashboardPage() {
     is_active: true,
   });
 
+  const getAuthHeaders = async (): Promise<Record<string, string>> => {
+    if (isSupabaseConfigured && supabase) {
+      const { data } = await supabase.auth.getSession();
+      if (data.session?.access_token) {
+        return {
+          Authorization: `Bearer ${data.session.access_token}`,
+        };
+      }
+    }
+    return {};
+  };
+
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
@@ -36,59 +48,15 @@ export default function AdminDashboardPage() {
         if (pData.products) setProducts(pData.products);
       }
 
-      // Fetch Orders
-      const ordRes = await fetch("/api/orders");
+      // Fetch Orders (requires authenticated admin)
+      const authHeaders = await getAuthHeaders();
+      const ordRes = await fetch("/api/orders", { headers: authHeaders });
       if (ordRes.ok) {
         const oData = await ordRes.json();
         if (oData.orders && oData.orders.length > 0) {
           setOrders(oData.orders);
         } else {
-          // Demo fallback orders if database empty
-          setOrders([
-            {
-              id: "MDF-78291",
-              customer_id: "cust-1",
-              total_amount: 640,
-              status: "pending",
-              created_at: new Date().toISOString(),
-              customer: {
-                id: "cust-1",
-                name: "তানভীর আহমেদ",
-                phone: "01862092701",
-                address: "বাড়ি-১২, রোড-৪, ধানমন্ডি, ঢাকা",
-              },
-              order_items: [
-                {
-                  product_id: "prod-1",
-                  quantity: 2,
-                  price_at_order: 180,
-                  product: {
-                    id: "prod-1",
-                    name: "রাজশাহীর প্রিমিয়াম হিমসাগর আম",
-                    price: 180,
-                    unit: "প্রতি কেজি",
-                    image_url: "",
-                    stock: 50,
-                    is_active: true,
-                  },
-                },
-                {
-                  product_id: "prod-3",
-                  quantity: 1,
-                  price_at_order: 280,
-                  product: {
-                    id: "prod-3",
-                    name: "মিষ্টি রয়াল গালা আপেল",
-                    price: 280,
-                    unit: "প্রতি কেজি",
-                    image_url: "",
-                    stock: 50,
-                    is_active: true,
-                  },
-                },
-              ],
-            },
-          ]);
+          setOrders([]);
         }
       }
     } catch (err) {
@@ -104,16 +72,13 @@ export default function AdminDashboardPage() {
       if (isSupabaseConfigured && supabase) {
         const { data } = await supabase.auth.getSession();
         if (!data.session) {
-          // If no session, redirect to login
+          // If no active Supabase session, redirect to login
           router.push("/admin/login");
           return;
         }
       } else {
-        const demoSession = localStorage.getItem("mayer_doa_admin_session");
-        if (!demoSession) {
-          router.push("/admin/login");
-          return;
-        }
+        router.push("/admin/login");
+        return;
       }
       loadData();
     };
@@ -145,6 +110,7 @@ export default function AdminDashboardPage() {
   const handleSaveProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!productForm.name || !productForm.price) return;
+    const authHeaders = await getAuthHeaders();
 
     if (editingProduct) {
       // Update existing
@@ -164,7 +130,7 @@ export default function AdminDashboardPage() {
 
       await fetch("/api/products", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...authHeaders },
         body: JSON.stringify(updated),
       });
     } else {
@@ -185,7 +151,7 @@ export default function AdminDashboardPage() {
 
       await fetch("/api/products", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...authHeaders },
         body: JSON.stringify(newProd),
       });
     }
@@ -197,7 +163,11 @@ export default function AdminDashboardPage() {
   const handleDeleteProduct = async (id: string) => {
     if (!confirm("আপনি কি নিশ্চিত এই পণ্যটি মুছে ফেলতে চান?")) return;
     setProducts((prev) => prev.filter((p) => p.id !== id));
-    await fetch(`/api/products?id=${id}`, { method: "DELETE" });
+    const authHeaders = await getAuthHeaders();
+    await fetch(`/api/products?id=${id}`, {
+      method: "DELETE",
+      headers: authHeaders,
+    });
   };
 
   const openAddModal = () => {
@@ -427,7 +397,7 @@ export default function AdminDashboardPage() {
                     <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-xl bg-surface-container overflow-hidden shrink-0">
                       <img
                         className="w-full h-full object-cover"
-                        alt={prod.name}
+                        alt={`তাজা ${prod.name} - প্রোডাক্ট থাম্বনেইল`}
                         src={prod.image_url}
                         loading="lazy"
                       />
