@@ -46,29 +46,29 @@ export const Footer: React.FC = () => {
             <h4 className="text-headline-sm font-headline-sm text-surface-container-lowest font-bold mb-4">
               গুরুত্বপূর্ণ লিংক
             </h4>
-            <ul className="space-y-2.5 text-body-sm font-body-sm text-on-primary-container">
+            <ul className="space-y-1 text-body-sm font-body-sm text-on-primary-container">
               <li>
-                <a className="hover:text-primary-fixed transition-colors" href="#about">
+                <a className="hover:text-primary-fixed transition-colors block py-1.5" href="#about">
                   আমাদের কথা
                 </a>
               </li>
               <li>
-                <a className="hover:text-primary-fixed transition-colors" href="#categories">
+                <a className="hover:text-primary-fixed transition-colors block py-1.5" href="#categories">
                   ফলের তালিকা
                 </a>
               </li>
               <li>
-                <a className="hover:text-primary-fixed transition-colors" href="#privacy">
+                <a className="hover:text-primary-fixed transition-colors block py-1.5" href="#privacy">
                   গোপনীয়তা নীতি
                 </a>
               </li>
               <li>
-                <a className="hover:text-primary-fixed transition-colors" href="#refund">
+                <a className="hover:text-primary-fixed transition-colors block py-1.5" href="#refund">
                   রিটার্ন ও রিফান্ড নীতি
                 </a>
               </li>
               <li>
-                <a className="hover:text-primary-fixed transition-colors" href="#terms">
+                <a className="hover:text-primary-fixed transition-colors block py-1.5" href="#terms">
                   ক্যাশ অন ডেলিভারি নিয়মাবলী
                 </a>
               </li>
@@ -80,34 +80,34 @@ export const Footer: React.FC = () => {
             <h4 className="text-headline-sm font-headline-sm text-surface-container-lowest font-bold mb-4">
               গ্রাহক সেবা
             </h4>
-            <ul className="space-y-2.5 text-body-sm font-body-sm text-on-primary-container">
+            <ul className="space-y-1 text-body-sm font-body-sm text-on-primary-container">
               <li>
-                <a className="hover:text-primary-fixed transition-colors" href="#help">
+                <a className="hover:text-primary-fixed transition-colors block py-1.5" href="#help">
                   অর্ডার করার নিয়ম
                 </a>
               </li>
               <li>
-                <a className="hover:text-primary-fixed transition-colors" href="#track">
+                <a className="hover:text-primary-fixed transition-colors block py-1.5" href="#track">
                   অর্ডার ট্র্যাকিং
                 </a>
               </li>
               <li>
-                <a className="hover:text-primary-fixed transition-colors" href="#delivery">
+                <a className="hover:text-primary-fixed transition-colors block py-1.5" href="#delivery">
                   ডেলিভারি চার্জ
                 </a>
               </li>
               <li>
-                <a className="hover:text-primary-fixed transition-colors" href="#faq">
+                <a className="hover:text-primary-fixed transition-colors block py-1.5" href="#faq">
                   সচরাচর জিজ্ঞাসা (FAQ)
                 </a>
               </li>
               <li>
-                <a className="hover:text-primary-fixed transition-colors" href="#contact">
+                <a className="hover:text-primary-fixed transition-colors block py-1.5" href="#contact">
                   যোগাযোগ ও সহায়তা
                 </a>
               </li>
               <li>
-                <Link className="hover:text-primary-fixed transition-colors text-secondary-fixed" href="/admin/login">
+                <Link className="hover:text-primary-fixed transition-colors text-secondary-fixed block py-1.5" href="/admin/login">
                   অ্যাডমিন প্যানেল
                 </Link>
               </li>
@@ -156,26 +156,26 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Footer Bottom Strip */}
-        <div className="pt-8 border-t border-primary-container/80 flex flex-col md:flex-row justify-between items-center gap-4 text-body-sm font-body-sm text-on-primary-container">
+        <div className="pt-8 border-t border-primary-container/80 flex flex-col md:flex-row justify-between items-center gap-4 text-body-sm font-body-sm text-on-primary-container text-center md:text-left">
           <div>স্বত্বাধিকার © ২০২৪ মায়ের দোয়া ফল - প্রতিটি ফোঁটায় ভালোবাসা। সর্বস্বত্ব সংরক্ষিত।</div>
-          <div className="flex items-center gap-4 text-label-md font-label-md flex-wrap">
-            <a className="hover:text-primary-fixed transition-colors" href="#about">
+          <div className="flex items-center gap-3 sm:gap-4 text-label-md font-label-md flex-wrap justify-center">
+            <a className="hover:text-primary-fixed transition-colors py-1" href="#about">
               আমাদের কথা
             </a>
             <span>•</span>
-            <a className="hover:text-primary-fixed transition-colors" href="#privacy">
+            <a className="hover:text-primary-fixed transition-colors py-1" href="#privacy">
               গোপনীয়তা নীতি
             </a>
             <span>•</span>
-            <a className="hover:text-primary-fixed transition-colors" href="#refund">
+            <a className="hover:text-primary-fixed transition-colors py-1" href="#refund">
               রিটার্ন ও রিফান্ড নীতি
             </a>
             <span>•</span>
-            <a className="hover:text-primary-fixed transition-colors" href="#terms">
+            <a className="hover:text-primary-fixed transition-colors py-1" href="#terms">
               ক্যাশ অন ডেলিভারি নিয়মাবলী
             </a>
             <span>•</span>
-            <a className="hover:text-primary-fixed transition-colors" href="#contact">
+            <a className="hover:text-primary-fixed transition-colors py-1" href="#contact">
               যোগাযোগ ও সহায়তা
             </a>
           </div>

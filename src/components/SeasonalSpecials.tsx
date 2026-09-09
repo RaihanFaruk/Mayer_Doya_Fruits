@@ -67,7 +67,7 @@ export const SeasonalSpecials: React.FC = () => {
               <div className="rounded-2xl overflow-hidden shadow-2xl border-2 border-surface-container-lowest/20 aspect-video lg:aspect-square">
                 <img
                   className="w-full h-full object-cover"
-                  alt="এই মৌসুমের সেরা তাজা আম্রপালি ও লিচু উৎসব"
+                  alt="তাজা আম্রপালি আম ও বেদানা লিচু উৎসব - মায়ের দোয়া ফল"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxe377vrdsbqFn3ssfMEsPF96aXOPkblZK0UahhH7hLN-oKfort02M0jD6jFgZS9a9m9G6YAb61xXz2H8XeIJ2Qv-xVHTrd8J7Oniu0apIEqhKXXNjTFmGjfsKgGLTVKSvsAuQzyt1A32l3ExYOvvbPfHgVhCcnK-FlQBwCK-ejs9WH5hVi77jTc-a8BoARbVJJeREry_ykwwC3di-xwdcCdujQjQuKfs0xs-G4SI7CMsQJxLl7aSm"
                 />
               </div>

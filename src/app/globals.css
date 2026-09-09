@@ -38,3 +38,83 @@
 .hero-glow {
   background: radial-gradient(circle at 50% 50%, rgba(182, 240, 197, 0.45) 0%, rgba(241, 252, 241, 0) 70%);
 }
+
+/* Continuous Marquee Ticker */
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-container {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 28s linear infinite;
+  will-change: transform;
+}
+
+.marquee-container:hover .marquee-track,
+.marquee-container:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+/* Shimmer Skeleton Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(229, 241, 229, 0.6) 25%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(229, 241, 229, 0.6) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite linear;
+}
+
+/* Pulse indicator */
+@keyframes ping-slow {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(27, 109, 36, 0.5);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 8px rgba(27, 109, 36, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(27, 109, 36, 0);
+  }
+}
+
+.pulse-dot {
+  animation: ping-slow 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+

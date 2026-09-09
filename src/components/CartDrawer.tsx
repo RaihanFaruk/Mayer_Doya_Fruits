@@ -31,8 +31,8 @@ export const CartDrawer: React.FC = () => {
         onClick={() => setIsCartOpen(false)}
       />
 
-      <div className="absolute inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-surface-container-lowest shadow-2xl flex flex-col pointer-events-auto">
+      <div className="absolute inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10">
+        <div className="w-screen max-w-md bg-surface-container-lowest shadow-2xl flex flex-col pointer-events-auto h-full max-h-screen">
           {/* Cart Header */}
           <div className="p-4 border-b border-outline-variant flex items-center justify-between bg-surface-container-low">
             <div className="flex items-center gap-2">
@@ -43,7 +43,8 @@ export const CartDrawer: React.FC = () => {
               </span>
             </div>
             <button
-              className="text-outline hover:text-primary p-1 rounded-lg transition-colors"
+              aria-label="কার্ট বন্ধ করুন"
+              className="text-outline hover:text-primary p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg transition-colors"
               onClick={() => setIsCartOpen(false)}
             >
               <span className="material-symbols-outlined text-[24px]">close</span>
@@ -53,17 +54,31 @@ export const CartDrawer: React.FC = () => {
           {/* Cart Items List */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scroll">
             {cart.length === 0 ? (
-              <div className="py-16 text-center">
-                <span className="material-symbols-outlined text-[48px] text-outline opacity-50 mb-2">
-                  shopping_cart
-                </span>
-                <p className="text-body-md text-on-surface-variant">আপনার কার্ট বর্তমানে খালি আছে।</p>
+              <div className="py-14 px-4 text-center flex flex-col items-center justify-center">
+                <div className="w-20 h-20 rounded-2xl bg-surface-container flex items-center justify-center text-outline mb-4 shadow-inner">
+                  <span className="material-symbols-outlined text-[42px] text-primary/40">
+                    shopping_basket
+                  </span>
+                </div>
+                <h4 className="text-headline-sm font-bold text-primary mb-1">
+                  আপনার কার্ট বর্তমানে খালি
+                </h4>
+                <p className="text-body-sm text-on-surface-variant max-w-xs mb-6 leading-relaxed">
+                  বাগান থেকে বাছাই করা ১০০% ফরমালিনমুক্ত ও মিষ্টি তাজা ফল এখনই সংগ্রহ করুন।
+                </p>
                 <button
-                  className="mt-4 inline-flex items-center gap-2 bg-primary text-surface-container-lowest px-4 py-2 rounded-xl text-label-md font-bold"
+                  type="button"
+                  className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-container text-surface-container-lowest px-6 py-3 rounded-xl font-bold text-label-md transition-all shadow-md active:scale-95 min-h-[48px]"
                   onClick={() => setIsCartOpen(false)}
                 >
-                  ফল বাছাই করুন
+                  <span className="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+                  <span>ফল কেনাকাটা শুরু করুন</span>
                 </button>
+                <div className="flex items-center gap-3 mt-6 text-[11px] text-secondary font-medium">
+                  <span>✓ ক্যাশ অন ডেলিভারি</span>
+                  <span>•</span>
+                  <span>✓ ২৪ ঘণ্টায় ডেলিভারি</span>
+                </div>
               </div>
             ) : (
               cart.map((item) => (
@@ -74,7 +89,7 @@ export const CartDrawer: React.FC = () => {
                   <div className="w-16 h-16 rounded-lg bg-surface-container shrink-0 overflow-hidden">
                     <img
                       className="w-full h-full object-cover"
-                      alt={item.product.name}
+                      alt={`তাজা ${item.product.name} ${item.product.unit}`}
                       src={item.product.image_url}
                     />
                   </div>
@@ -85,11 +100,11 @@ export const CartDrawer: React.FC = () => {
                       </h4>
                       <button
                         type="button"
-                        aria-label="Remove item"
-                        className="text-outline hover:text-error text-[16px] transition-colors"
+                        aria-label="আইটেম মুছুন"
+                        className="text-outline hover:text-error p-2 min-w-[44px] min-h-[44px] -mr-2 -mt-2 flex items-center justify-center transition-colors"
                         onClick={() => removeFromCart(item.product.id)}
                       >
-                        <span className="material-symbols-outlined text-[16px]">delete</span>
+                        <span className="material-symbols-outlined text-[20px]">delete</span>
                       </button>
                     </div>
                     <p className="text-body-sm text-on-surface-variant">
@@ -137,7 +152,7 @@ export const CartDrawer: React.FC = () => {
 
               <button
                 type="button"
-                className="w-full bg-primary hover:bg-primary-container text-surface-container-lowest py-3 rounded-xl font-label-lg text-label-lg font-bold transition-all shadow-md flex items-center justify-center gap-2 active:scale-95"
+                className="w-full bg-primary hover:bg-primary-container text-surface-container-lowest py-3.5 rounded-xl font-label-lg text-label-lg font-bold transition-all shadow-md flex items-center justify-center gap-2 active:scale-95 min-h-[48px]"
                 onClick={handleProceedToCheckout}
               >
                 <span>অর্ডার কনফার্ম করুন (ক্যাশ অন ডেলিভারি)</span>

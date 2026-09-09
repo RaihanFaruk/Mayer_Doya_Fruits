@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { supabase, isSupabaseConfigured } from "@/lib/supabaseClient";
 import { CartItem } from "@/types";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();

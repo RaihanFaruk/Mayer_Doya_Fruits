@@ -69,7 +69,7 @@ export const BestSellingSection: React.FC<BestSellingSectionProps> = ({
               <button
                 key={pill}
                 type="button"
-                className={`px-4 py-1.5 rounded-full text-label-md font-label-md shrink-0 transition-colors ${
+                className={`px-4 py-2 sm:py-1.5 rounded-full text-label-md font-label-md shrink-0 transition-colors min-h-[44px] sm:min-h-[36px] flex items-center justify-center ${
                   currentFilter === pill
                     ? "bg-primary text-surface-container-lowest"
                     : "bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:border-primary"
@@ -82,11 +82,47 @@ export const BestSellingSection: React.FC<BestSellingSectionProps> = ({
           </div>
         </div>
 
-        {/* Product Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+        {/* Product Cards Grid: 2 columns on mobile, 3 columns on tablet, 4 columns on desktop */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+          {products.length === 0 ? (
+            /* Skeleton Loading State */
+            Array.from({ length: 8 }).map((_, idx) => (
+              <div
+                key={idx}
+                className="bg-surface-container-lowest rounded-2xl border border-outline-variant/60 overflow-hidden flex flex-col shadow-sm"
+              >
+                <div className="aspect-[4/3] bg-surface-container skeleton-shimmer" />
+                <div className="p-3 sm:p-4 space-y-2">
+                  <div className="h-3 bg-surface-container rounded w-1/2 skeleton-shimmer" />
+                  <div className="h-4 bg-surface-container rounded w-3/4 skeleton-shimmer" />
+                  <div className="h-5 bg-surface-container rounded w-1/3 skeleton-shimmer" />
+                  <div className="h-10 bg-surface-container rounded-xl skeleton-shimmer mt-2" />
+                </div>
+              </div>
+            ))
+          ) : filteredProducts.length === 0 ? (
+            /* Empty Filter Search State */
+            <div className="col-span-full py-12 text-center bg-surface-container-lowest rounded-2xl border border-outline-variant/60 p-6">
+              <span className="material-symbols-outlined text-[48px] text-outline opacity-40 mb-2">
+                search_off
+              </span>
+              <h3 className="text-headline-sm font-bold text-primary mb-1">কোনো ফল পাওয়া যায়নি</h3>
+              <p className="text-body-sm text-on-surface-variant mb-4">
+                ফিল্টার পরিবর্তন করুন অথবা অন্য কোনো নাম দিয়ে অনুসন্ধান করুন।
+              </p>
+              <button
+                type="button"
+                onClick={() => handleFilterClick("সকল ফল")}
+                className="inline-flex items-center gap-1.5 bg-primary text-surface-container-lowest px-4 py-2 rounded-xl text-label-md font-bold transition-all shadow"
+              >
+                <span>সব ফল দেখুন</span>
+              </button>
+            </div>
+          ) : (
+            filteredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))
+          )}
         </div>
       </div>
     </section>

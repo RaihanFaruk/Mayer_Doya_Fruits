@@ -121,25 +121,26 @@ export const CheckoutModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-3 sm:p-4">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-inverse-surface/60 backdrop-blur-sm transition-opacity"
         onClick={() => !isSubmitting && setIsCheckoutOpen(false)}
       />
 
-      <div className="relative bg-surface-container-lowest max-w-lg w-full rounded-2xl p-6 shadow-2xl border border-outline-variant z-10">
+      <div className="relative bg-surface-container-lowest max-w-lg w-full rounded-2xl p-4 sm:p-6 shadow-2xl border border-outline-variant z-10 my-auto max-h-[92vh] overflow-y-auto custom-scroll">
         {/* Modal Header */}
-        <div className="flex items-center justify-between pb-4 mb-4 border-b border-outline-variant">
+        <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-outline-variant">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary text-[24px]">local_shipping</span>
-            <h3 className="text-headline-sm font-headline-sm text-primary font-bold">
+            <span className="material-symbols-outlined text-primary text-[22px] sm:text-[24px]">local_shipping</span>
+            <h3 className="text-[17px] sm:text-headline-sm font-headline-sm text-primary font-bold">
               ডেলিভারি তথ্য ও অর্ডার কনফার্মেশন
             </h3>
           </div>
           <button
             type="button"
-            className="text-outline hover:text-primary p-1 rounded-lg"
+            aria-label="বন্ধ করুন"
+            className="text-outline hover:text-primary p-2 min-w-[44px] min-h-[44px] -mr-2 flex items-center justify-center rounded-lg"
             onClick={() => setIsCheckoutOpen(false)}
           >
             <span className="material-symbols-outlined text-[24px]">close</span>

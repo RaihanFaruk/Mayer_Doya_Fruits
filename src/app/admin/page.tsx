@@ -229,32 +229,32 @@ export default function AdminDashboardPage() {
   return (
     <div className="min-h-screen bg-surface-container-low">
       {/* Admin Top Header */}
-      <header className="bg-primary text-surface-container-lowest px-4 md:px-8 py-4 shadow-md sticky top-0 z-30">
-        <div className="max-w-[1200px] mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-surface-container-lowest text-primary flex items-center justify-center font-bold">
-              <span className="material-symbols-outlined text-[24px]">nutrition</span>
+      <header className="bg-primary text-surface-container-lowest px-4 md:px-8 py-3.5 sm:py-4 shadow-md sticky top-0 z-30">
+        <div className="max-w-[1200px] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-surface-container-lowest text-primary flex items-center justify-center font-bold shrink-0">
+              <span className="material-symbols-outlined text-[22px] sm:text-[24px]">nutrition</span>
             </div>
             <div>
-              <h1 className="text-headline-sm font-bold">মায়ের দোয়া ফল</h1>
-              <p className="text-label-sm text-primary-fixed">অ্যাডমিন ড্যাশবোর্ড</p>
+              <h1 className="text-[17px] sm:text-headline-sm font-bold leading-tight">মায়ের দোয়া ফল</h1>
+              <p className="text-[11px] sm:text-label-sm text-primary-fixed">অ্যাডমিন ড্যাশবোর্ড</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end">
             <Link
               href="/"
               target="_blank"
-              className="px-3 py-1.5 rounded-lg bg-primary-container text-primary-fixed hover:bg-surface-container-lowest hover:text-primary transition-colors text-label-md font-medium flex items-center gap-1"
+              className="px-3 py-2 rounded-xl bg-primary-container text-primary-fixed hover:bg-surface-container-lowest hover:text-primary transition-colors text-label-md font-medium flex items-center gap-1.5 min-h-[44px]"
             >
-              <span className="material-symbols-outlined text-[16px]">visibility</span>
+              <span className="material-symbols-outlined text-[18px]">visibility</span>
               <span>স্টোর দেখুন</span>
             </Link>
             <button
               onClick={handleLogout}
-              className="px-3 py-1.5 rounded-lg bg-red-800 text-white hover:bg-red-700 transition-colors text-label-md font-medium flex items-center gap-1"
+              className="px-3 py-2 rounded-xl bg-red-800 text-white hover:bg-red-700 transition-colors text-label-md font-medium flex items-center gap-1.5 min-h-[44px]"
             >
-              <span className="material-symbols-outlined text-[16px]">logout</span>
+              <span className="material-symbols-outlined text-[18px]">logout</span>
               <span>লগআউট</span>
             </button>
           </div>
@@ -262,12 +262,12 @@ export default function AdminDashboardPage() {
       </header>
 
       {/* Main Container */}
-      <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-8">
+      <div className="max-w-[1200px] mx-auto px-3 sm:px-4 md:px-8 py-6 sm:py-8">
         {/* Navigation Tabs */}
-        <div className="flex items-center gap-3 border-b border-outline-variant pb-4 mb-6">
+        <div className="flex items-center gap-2 sm:gap-3 border-b border-outline-variant pb-3 sm:pb-4 mb-6 overflow-x-auto whitespace-nowrap custom-scroll">
           <button
             onClick={() => setActiveTab("orders")}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-label-lg transition-all ${
+            className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl font-label-lg transition-all min-h-[44px] shrink-0 ${
               activeTab === "orders"
                 ? "bg-primary text-surface-container-lowest shadow"
                 : "bg-surface-container-lowest text-on-surface hover:bg-surface-container"
@@ -279,7 +279,7 @@ export default function AdminDashboardPage() {
 
           <button
             onClick={() => setActiveTab("products")}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-label-lg transition-all ${
+            className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl font-label-lg transition-all min-h-[44px] shrink-0 ${
               activeTab === "products"
                 ? "bg-primary text-surface-container-lowest shadow"
                 : "bg-surface-container-lowest text-on-surface hover:bg-surface-container"
@@ -342,8 +342,8 @@ export default function AdminDashboardPage() {
                       </p>
                     </div>
 
-                    <div className="flex items-center gap-3">
-                      <div className="text-right">
+                    <div className="flex flex-wrap items-center gap-3 w-full md:w-auto justify-between md:justify-end pt-2 md:pt-0">
+                      <div className="text-left md:text-right">
                         <div className="text-headline-sm font-bold text-primary">
                           ৳ {order.total_amount}
                         </div>
@@ -359,7 +359,7 @@ export default function AdminDashboardPage() {
                             e.target.value as Order["status"]
                           )
                         }
-                        className={`rounded-xl py-1.5 px-3 text-label-md font-bold border ${
+                        className={`rounded-xl py-2 px-3 text-label-md font-bold border min-h-[44px] ${
                           order.status === "delivered"
                             ? "bg-emerald-100 text-emerald-800 border-emerald-300"
                             : order.status === "confirmed"
@@ -406,33 +406,34 @@ export default function AdminDashboardPage() {
         ) : (
           /* ================= PRODUCTS TAB ================= */
           <div className="space-y-4">
-            <div className="flex justify-between items-center mb-2">
+            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-2">
               <h2 className="text-headline-sm font-bold text-primary">ফল ও পণ্য সম্ভার</h2>
               <button
                 onClick={openAddModal}
-                className="bg-primary hover:bg-primary-container text-surface-container-lowest px-4 py-2.5 rounded-xl font-label-lg font-bold flex items-center gap-2 shadow"
+                className="bg-primary hover:bg-primary-container text-surface-container-lowest px-4 py-2.5 rounded-xl font-label-lg font-bold flex items-center justify-center gap-2 shadow min-h-[44px]"
               >
                 <span className="material-symbols-outlined text-[20px]">add_circle</span>
                 <span>নতুন ফল যোগ করুন</span>
               </button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
               {products.map((prod) => (
                 <div
                   key={prod.id}
-                  className="bg-surface-container-lowest rounded-2xl border border-outline-variant p-4 flex flex-col justify-between shadow-sm"
+                  className="bg-surface-container-lowest rounded-2xl border border-outline-variant p-3.5 sm:p-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow"
                 >
                   <div className="flex gap-3 mb-3">
-                    <div className="w-20 h-20 rounded-xl bg-surface-container overflow-hidden shrink-0">
+                    <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-xl bg-surface-container overflow-hidden shrink-0">
                       <img
                         className="w-full h-full object-cover"
                         alt={prod.name}
                         src={prod.image_url}
+                        loading="lazy"
                       />
                     </div>
                     <div>
-                      <h4 className="font-bold text-primary text-headline-sm line-clamp-1">
+                      <h4 className="font-bold text-primary text-[15px] sm:text-headline-sm line-clamp-1">
                         {prod.name}
                       </h4>
                       <p className="text-secondary font-bold text-label-md mt-0.5">
@@ -454,16 +455,16 @@ export default function AdminDashboardPage() {
                   <div className="flex items-center justify-end gap-2 pt-3 border-t border-outline-variant/60">
                     <button
                       onClick={() => openEditModal(prod)}
-                      className="px-3 py-1.5 rounded-lg border border-outline-variant hover:bg-surface-container text-primary font-medium text-body-sm flex items-center gap-1"
+                      className="px-3.5 py-2 rounded-xl border border-outline-variant hover:bg-surface-container text-primary font-medium text-body-sm flex items-center gap-1.5 min-h-[44px]"
                     >
-                      <span className="material-symbols-outlined text-[16px]">edit</span>
+                      <span className="material-symbols-outlined text-[18px]">edit</span>
                       <span>এডিট</span>
                     </button>
                     <button
                       onClick={() => handleDeleteProduct(prod.id)}
-                      className="px-3 py-1.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 font-medium text-body-sm flex items-center gap-1"
+                      className="px-3.5 py-2 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 font-medium text-body-sm flex items-center gap-1.5 min-h-[44px]"
                     >
-                      <span className="material-symbols-outlined text-[16px]">delete</span>
+                      <span className="material-symbols-outlined text-[18px]">delete</span>
                       <span>মুছুন</span>
                     </button>
                   </div>
@@ -476,15 +477,17 @@ export default function AdminDashboardPage() {
 
       {/* Product Add / Edit Modal */}
       {isProductModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-inverse-surface/60 backdrop-blur-sm">
-          <div className="bg-surface-container-lowest max-w-lg w-full rounded-2xl p-6 shadow-2xl border border-outline-variant">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-inverse-surface/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-surface-container-lowest max-w-lg w-full rounded-2xl p-4 sm:p-6 shadow-2xl border border-outline-variant max-h-[92vh] overflow-y-auto custom-scroll my-auto">
             <div className="flex justify-between items-center pb-3 mb-4 border-b border-outline-variant">
               <h3 className="text-headline-sm font-bold text-primary">
                 {editingProduct ? "ফল আপডেট করুন" : "নতুন ফল যুক্ত করুন"}
               </h3>
               <button
+                type="button"
+                aria-label="মোডাল বন্ধ করুন"
                 onClick={() => setIsProductModalOpen(false)}
-                className="text-outline hover:text-primary"
+                className="text-outline hover:text-primary p-2 min-w-[44px] min-h-[44px] -mr-2 flex items-center justify-center rounded-lg"
               >
                 <span className="material-symbols-outlined text-[24px]">close</span>
               </button>

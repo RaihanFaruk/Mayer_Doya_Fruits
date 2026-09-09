@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { supabase, isSupabaseConfigured } from "@/lib/supabaseClient";
 import { INITIAL_PRODUCTS } from "@/lib/initialData";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     if (isSupabaseConfigured && supabase) {

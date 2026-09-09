@@ -7,55 +7,55 @@ export const HeroSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Hero Text Left (7 cols) */}
           <div className="lg:col-span-7 flex flex-col items-start">
-            {/* Emotional Quality Stamp */}
-            <div className="inline-flex items-center gap-2 bg-surface-container-lowest border border-secondary-container px-3.5 py-1.5 rounded-full shadow-sm mb-4">
-              <span className="material-symbols-outlined text-secondary text-[18px]">verified</span>
-              <span className="text-label-md font-label-md text-on-secondary-container font-semibold">
+            {/* Emotional Quality Stamp with Live Pulse Dot */}
+            <div className="inline-flex items-center gap-2 bg-surface-container-lowest/90 backdrop-blur border border-secondary-container px-3.5 py-1.5 rounded-full shadow-sm mb-4">
+              <span className="w-2.5 h-2.5 rounded-full bg-secondary pulse-dot shrink-0" />
+              <span className="text-[11px] sm:text-label-md font-label-md text-on-secondary-container font-semibold">
                 মায়ের যত্নের মতো যত্ন নিয়ে বাছাই করা তাজা ফল
               </span>
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-display-hero-mobile md:text-display-hero font-display-hero text-primary tracking-tight mb-4">
+            <h1 className="text-[26px] sm:text-[34px] md:text-[40px] lg:text-[46px] font-bold text-primary tracking-tight leading-[1.2] mb-4">
               তাজা ফল, <br className="hidden sm:inline" />
               <span className="text-secondary underline decoration-secondary/30">ভালোবাসার সাথে</span>
             </h1>
 
-            <p className="text-body-lg font-body-lg text-on-surface-variant mb-6 max-w-xl">
+            <p className="text-body-md sm:text-body-lg font-body-lg text-on-surface-variant mb-6 max-w-xl leading-relaxed">
               বাছাই করা ফরমালিনমুক্ত মিষ্টি তাজা ফল এখন সরাসরি বাগান থেকে আপনার ঘরে। রাজশাহী, চাঁপাইনবাবগঞ্জ ও দিনাজপুরের খাঁটি স্বাদ পৌঁছে দিচ্ছি সর্বোচ্চ আস্থায়।
             </p>
 
             {/* Dual CTA Cluster */}
             <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto mb-8">
               <a
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-primary-container hover:bg-primary text-surface-container-lowest font-label-lg text-label-lg px-6 py-3.5 rounded-xl transition-all shadow-md hover:shadow-lg active:scale-[0.98]"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-primary hover:bg-primary-container text-surface-container-lowest font-bold text-label-lg px-7 py-3.5 rounded-xl transition-all shadow-md hover:shadow-xl active:scale-[0.98] min-h-[48px]"
                 href="#best-selling"
               >
                 <span>এখনই ফল কিনুন</span>
                 <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
               </a>
               <a
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-surface-container-lowest border border-outline-variant hover:bg-surface-container text-primary font-label-lg text-label-lg px-6 py-3.5 rounded-xl transition-all"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-surface-container-lowest border-2 border-outline-variant hover:border-primary hover:bg-surface-container text-primary font-bold text-label-lg px-6 py-3.5 rounded-xl transition-all min-h-[48px]"
                 href="#categories"
               >
-                <span className="material-symbols-outlined text-[18px]">menu_book</span>
+                <span className="material-symbols-outlined text-[18px] text-secondary">menu_book</span>
                 <span>জনপ্রিয় ফল দেখুন</span>
               </a>
             </div>
 
             {/* Mini Trust Stats */}
-            <div className="grid grid-cols-3 gap-3 pt-4 border-t border-outline-variant/60 w-full max-w-lg">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 pt-4 border-t border-outline-variant/60 w-full max-w-lg">
               <div className="flex flex-col">
-                <span className="text-headline-md font-headline-md text-primary font-bold">১৫,০০০+</span>
-                <span className="text-label-md font-label-md text-on-surface-variant">সন্তুষ্ট পরিবার</span>
+                <span className="text-[18px] sm:text-headline-md font-headline-md text-primary font-bold">১৫,০০০+</span>
+                <span className="text-[11px] sm:text-label-md font-label-md text-on-surface-variant">সন্তুষ্ট পরিবার</span>
               </div>
-              <div className="flex flex-col border-l border-outline-variant/60 pl-3">
-                <span className="text-headline-md font-headline-md text-secondary font-bold">১০০%</span>
-                <span className="text-label-md font-label-md text-on-surface-variant">খাঁটি গ্যারান্টি</span>
+              <div className="flex flex-col border-l border-outline-variant/60 pl-2 sm:pl-3">
+                <span className="text-[18px] sm:text-headline-md font-headline-md text-secondary font-bold">১০০%</span>
+                <span className="text-[11px] sm:text-label-md font-label-md text-on-surface-variant">খাঁটি গ্যারান্টি</span>
               </div>
-              <div className="flex flex-col border-l border-outline-variant/60 pl-3">
-                <span className="text-headline-md font-headline-md text-primary font-bold">২৪ ঘণ্টায়</span>
-                <span className="text-label-md font-label-md text-on-surface-variant">হোম ডেলিভারি</span>
+              <div className="flex flex-col border-l border-outline-variant/60 pl-2 sm:pl-3">
+                <span className="text-[18px] sm:text-headline-md font-headline-md text-primary font-bold">২৪ ঘণ্টায়</span>
+                <span className="text-[11px] sm:text-label-md font-label-md text-on-surface-variant">হোম ডেলিভারি</span>
               </div>
             </div>
           </div>
@@ -65,7 +65,7 @@ export const HeroSection: React.FC = () => {
             <div className="relative rounded-3xl overflow-hidden shadow-xl border-4 border-surface-container-lowest bg-surface-container aspect-square md:aspect-[4/3] lg:aspect-[1/1] group">
               <img
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                alt="মায়ের দোয়া ফল তাজা ফলের সমাহার"
+                alt="মায়ের দোয়া ফল - তাজা হিমসাগর আম, বেদানা লিচু ও বিদেশি ফলের অনলাইন সমাহার"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuA63yH6J7Es4zdfCoeQG_cJuDBPVIX1ViiM9iXEddD21lxL2ccgyW97aNxho24gYR3XnNyucPjGdu4axuniuaawBxdEqLel6jHb_49-2tr9ZILCLi5qEhGN9hg1zCvT-SMj_k4XoTlfENDibgtfz7yJ8kBOLJeTfR8BKvpP1l89KxYLgWwGNakae73M4KBeQbH_LYVe_IGFgbXggCGrYGnOf5GRxdIFxAodH9fFG67BsUzdF0uBLMI_"
               />
 
