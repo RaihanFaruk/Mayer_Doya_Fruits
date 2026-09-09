@@ -4,22 +4,40 @@ import React, { useEffect, useState } from "react";
 import { WHATSAPP_PHONE } from "@/lib/whatsapp";
 
 interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+  readonly platforms: string[];
+  readonly userChoice: Promise<{
+    outcome: "accepted" | "dismissed";
+    platform: string;
+  }>;
+  prompt(): Promise<void>;
 }
 
 export const PwaPromo: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [installed, setInstalled] = useState(false);
+  const [installed, setInstalled] = useState<boolean>(false);
 
   useEffect(() => {
+    // Check if the app is already running in standalone (installed) mode
+    const isStandalone =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      (window.navigator as unknown as { standalone?: boolean }).standalone === true;
+
+    if (isStandalone) {
+      setInstalled(true);
+    }
+
+    // Capture the beforeinstallprompt event when the browser supports it
     const handleBeforeInstall = (e: Event) => {
+      // Prevent the browser's default automated mini-infobar prompt
       e.preventDefault();
+      // Store the event so it can be triggered by user interaction
       setDeferredPrompt(e as BeforeInstallPromptEvent);
     };
 
+    // Handle when the PWA is successfully installed
     const handleAppInstalled = () => {
       setInstalled(true);
+      // Clean up the stored event
       setDeferredPrompt(null);
     };
 
@@ -33,15 +51,20 @@ export const PwaPromo: React.FC = () => {
   }, []);
 
   const handleInstallClick = async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
+    if (!deferredPrompt) return;
+
+    try {
+      // Trigger the prompt on user gesture
+      await deferredPrompt.prompt();
       const choice = await deferredPrompt.userChoice;
-      if (choice.outcome === "accepted") {
+      if (choice && choice.outcome === "accepted") {
         setInstalled(true);
       }
+    } catch (err) {
+      console.error("Error invoking beforeinstallprompt:", err);
+    } finally {
+      // Clean up the stored event after prompting
       setDeferredPrompt(null);
-    } else {
-      alert("ব্রাউজার মেন্যু (৩ ডট) থেকে 'Add to Home Screen' অথবা 'Install App' নির্বাচন করে ইনস্টল করুন।");
     }
   };
 
@@ -61,14 +84,17 @@ export const PwaPromo: React.FC = () => {
               সহজেই যেকোনো সময় অর্ডার করতে ওয়েবসাইটটি আপনার মোবাইলের হোম স্ক্রিনে সেভ করুন। উপভোগ করুন ১-ক্লিকে রি-অর্ডার ও লাইভ ডেলিভারি নোটিফিকেশন।
             </p>
             <div className="flex flex-wrap items-center gap-3">
-              <button
-                type="button"
-                className="bg-primary hover:bg-primary-container text-surface-container-lowest font-label-lg text-label-lg px-6 py-3 rounded-xl transition-all shadow flex items-center gap-2 active:scale-95"
-                onClick={handleInstallClick}
-              >
-                <span className="material-symbols-outlined text-[20px]">add_to_home_screen</span>
-                <span>{installed ? "অ্যাপ ইনস্টল করা আছে" : "অ্যাপ ইনস্টল করুন"}</span>
-              </button>
+              {/* Only render the install button when the browser actually supports the install prompt and has provided the event */}
+              {deferredPrompt && !installed && (
+                <button
+                  type="button"
+                  className="bg-primary hover:bg-primary-container text-surface-container-lowest font-label-lg text-label-lg px-6 py-3 rounded-xl transition-all shadow flex items-center gap-2 active:scale-95"
+                  onClick={handleInstallClick}
+                >
+                  <span className="material-symbols-outlined text-[20px]">add_to_home_screen</span>
+                  <span>অ্যাপ ইনস্টল করুন</span>
+                </button>
+              )}
               <a
                 className="bg-surface-container-lowest border border-outline-variant hover:border-secondary text-primary font-label-lg text-label-lg px-5 py-3 rounded-xl transition-all flex items-center gap-2"
                 href={`https://wa.me/${WHATSAPP_PHONE}`}
