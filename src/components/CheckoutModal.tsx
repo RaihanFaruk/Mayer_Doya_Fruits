@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { getWhatsAppUrl, sanitizePhone } from "@/lib/whatsapp";
+import { fbEvent } from "@/lib/fpixel";
 
 export const CheckoutModal: React.FC = () => {
   const {
@@ -119,7 +120,22 @@ export const CheckoutModal: React.FC = () => {
         console.warn("Popup blocked by browser, user can tap link in success modal:", popupErr);
       }
 
-      // 4. Update state & transition to success modal
+      // 4. Track Facebook Pixel Purchase event
+      fbEvent("Purchase", {
+        value: totalAmount,
+        currency: "BDT",
+        content_type: "product",
+        content_ids: cart.map((item) => item.product.id),
+        contents: cart.map((item) => ({
+          id: item.product.id,
+          name: item.product.name,
+          quantity: item.quantity,
+          item_price: item.product.price,
+        })),
+        num_items: cart.reduce((sum, item) => sum + item.quantity, 0),
+      });
+
+      // 5. Update state & transition to success modal
       setLastOrderId(orderId);
       clearCart();
       setIsCheckoutOpen(false);

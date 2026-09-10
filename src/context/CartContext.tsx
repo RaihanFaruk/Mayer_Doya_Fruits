@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { CartItem, Customer, Product } from "@/types";
+import { fbEvent } from "@/lib/fpixel";
 
 interface CartContextType {
   cart: CartItem[];
@@ -103,6 +104,15 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       return [...prevCart, { product, quantity }];
     });
     setIsCartOpen(true);
+
+    // Track Facebook Pixel AddToCart event
+    fbEvent("AddToCart", {
+      content_name: product.name,
+      content_ids: [product.id],
+      content_type: "product",
+      value: product.price * quantity,
+      currency: "BDT",
+    });
   };
 
   const updateQuantity = (productId: string, quantity: number) => {
@@ -143,6 +153,15 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       return [...prevCart, { product, quantity }];
     });
     setIsCheckoutOpen(true);
+
+    // Track Facebook Pixel AddToCart event
+    fbEvent("AddToCart", {
+      content_name: product.name,
+      content_ids: [product.id],
+      content_type: "product",
+      value: product.price * quantity,
+      currency: "BDT",
+    });
   };
 
   const saveCustomerProfile = (profile: Omit<Customer, "id">) => {

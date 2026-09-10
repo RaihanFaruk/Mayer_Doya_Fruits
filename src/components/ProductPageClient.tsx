@@ -15,9 +15,7 @@ export const ProductPageClient: React.FC<ProductPageClientProps> = ({ product })
   const [addedMessage, setAddedMessage] = useState(false);
 
   const handleAddToCart = () => {
-    for (let i = 0; i < quantity; i++) {
-      addToCart(product);
-    }
+    addToCart(product, quantity);
     setAddedMessage(true);
     setTimeout(() => setAddedMessage(false), 2500);
   };

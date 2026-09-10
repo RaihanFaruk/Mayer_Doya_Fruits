@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
 import { SITE_URL } from "@/lib/siteConfig";
+import { FacebookPixel } from "@/components/FacebookPixel";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -75,6 +76,9 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
       "max-snippet": -1,
     },
+  },
+  verification: {
+    google: "YOUR_GOOGLE_SITE_VERIFICATION_CODE", // গুগল সার্চ কনসোল থেকে প্রাপ্ত ভেরিফিকেশন কোডটি এখানে বসান
   },
 };
 
@@ -176,6 +180,7 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-background text-on-surface antialiased relative min-h-screen flex flex-col selection:bg-secondary-container selection:text-on-secondary-container overflow-x-hidden">
+        <FacebookPixel />
         <CartProvider>{children}</CartProvider>
 
         {/* Register PWA service worker */}

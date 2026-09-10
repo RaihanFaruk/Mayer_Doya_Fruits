@@ -14,6 +14,7 @@ import { CartDrawer } from "@/components/CartDrawer";
 import { CheckoutModal } from "@/components/CheckoutModal";
 import { OrderSuccessModal } from "@/components/OrderSuccessModal";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
+import { TrackViewContent } from "@/components/FacebookPixel";
 
 interface Props {
   params: {
@@ -199,6 +200,14 @@ export default async function ProductDetailPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+
+      {/* Facebook Pixel ViewContent Tracker */}
+      <TrackViewContent
+        id={product.id}
+        name={product.name}
+        price={product.price}
+        category={product.category}
       />
 
       <TopUtilityBar />
